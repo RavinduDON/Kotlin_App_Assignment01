@@ -6,7 +6,7 @@ import retrofit2.http.GET;
 
 public interface PostApi {
 
-    @GET("/posts/1")
+    @GET("/posts/4")
     Call<Post> getPosts();
     
 }

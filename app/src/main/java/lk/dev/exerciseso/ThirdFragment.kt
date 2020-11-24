@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.google.gson.GsonBuilder
-import lk.dev.exerciseso.posts.api.PostApi
 import lk.dev.exerciseso.posts.models.Post
 import retrofit2.Call
 import retrofit2.Callback
@@ -48,7 +47,7 @@ class ThirdFragment : Fragment() {
         // Inflate the layout for this fragment
         val retrofit = Retrofit.Builder()
             .baseUrl("https://jsonplaceholder.typicode.com")
-                .addConverterFactory(GsonConverterFactory.create(gson))
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
 
         var postApi=retrofit.create(PostApi::class.java)

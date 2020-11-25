@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.GsonBuilder
+import lk.dev.exerciseso.Adaptors.PostAdaptor
+import lk.dev.exerciseso.posts.api.PostApi
 import lk.dev.exerciseso.posts.models.Post
 import retrofit2.Call
 import retrofit2.Callback
@@ -39,32 +41,46 @@ class ThirdFragment : Fragment() {
     }
 
     override fun onCreateView(
+
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val gson= GsonBuilder()
-                .create()
+        val gson= GsonBuilder().create()
         // Inflate the layout for this fragment
         val retrofit = Retrofit.Builder()
             .baseUrl("https://jsonplaceholder.typicode.com")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
 
-        var postApi=retrofit.create(PostApi::class.java)
-        var postCall=postApi.posts
-        postCall.enqueue(object : Callback<Post>{
-            override fun onResponse(call: Call<Post>, response: Response<Post>) {
-                var title = response.body()!!.title
-                Log.d("ThirdFragment","This is "+title)
-                view!!.findViewById<TextView>(R.id.title_textview).text=title
-
+        var postApi: PostApi=retrofit.create(PostApi::class.java)
+        var postCall = postApi.posts
+        postCall.enqueue(object : Callback<List<Post>>{
+            override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
+                val listView= view?.findViewById<RecyclerView>(R.id.post_data)
+                val adaptor=PostAdaptor(response.body() as ArrayList<Post>)
+                listView!!.adapter=adaptor
+                println("data recived")
             }
 
-            override fun onFailure(call: Call<Post>, t: Throwable) {
-                Log.d("ThirdFragment","Error with API")
+            override fun onFailure(call: Call<List<Post>>, t: Throwable) {
+               Log.d("GET ApI",t.message.toString())
             }
 
         })
+//        var postCall=postApi.posts
+//        postCall.enqueue(object : Callback<Post>{
+//            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+//                var title = response.body()!!.title
+//                Log.d("ThirdFragment","This is "+title)
+//                view!!.findViewById<TextView>(R.id.title_textview).text=title
+//
+//            }
+//
+//            override fun onFailure(call: Call<Post>, t: Throwable) {
+//                Log.d("ThirdFragment","Error with API")
+//            }
+//
+//        })
         return inflater.inflate(R.layout.fragment_third, container, false)
     }
 

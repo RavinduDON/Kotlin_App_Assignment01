@@ -25,7 +25,7 @@ class PostAdaptor(private val dataSet: ArrayList<Post>) : RecyclerView.Adapter<P
     }
 
     class ViewHolder(itemlayoutView: View): RecyclerView.ViewHolder(itemlayoutView){
-        lateinit var titleTextView:TextView
+         var titleTextView:TextView
         init {
             titleTextView=itemlayoutView.findViewById(R.id.title_textview)
         }

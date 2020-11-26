@@ -82,7 +82,7 @@ class ThirdFragment : Fragment() {
                 val listView= view?.findViewById<RecyclerView>(R.id.post_data)
                 val adaptor=PostAdaptor(postList)
                 listView?.adapter =adaptor
-                println("data recived")
+                println("connected")
             }
 
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {

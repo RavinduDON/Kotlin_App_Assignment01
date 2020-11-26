@@ -32,6 +32,8 @@ class ThirdFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    var postList =ArrayList<Post>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -45,28 +47,8 @@ class ThirdFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val gson= GsonBuilder().create()
-        // Inflate the layout for this fragment
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://jsonplaceholder.typicode.com")
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
 
-        var postApi: PostApi=retrofit.create(PostApi::class.java)
-        var postCall = postApi.posts
-        postCall.enqueue(object : Callback<List<Post>>{
-            override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
-                val listView= view?.findViewById<RecyclerView>(R.id.post_data)
-                val adaptor=PostAdaptor(response.body() as ArrayList<Post>)
-                listView!!.adapter=adaptor
-                println("data recived")
-            }
 
-            override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-               Log.d("GET ApI",t.message.toString())
-            }
-
-        })
 //        var postCall=postApi.posts
 //        postCall.enqueue(object : Callback<Post>{
 //            override fun onResponse(call: Call<Post>, response: Response<Post>) {
@@ -82,6 +64,32 @@ class ThirdFragment : Fragment() {
 //
 //        })
         return inflater.inflate(R.layout.fragment_third, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val gson= GsonBuilder().create()
+        // Inflate the layout for this fragment
+        val retrofit = Retrofit.Builder()
+                .baseUrl("https://jsonplaceholder.typicode.com")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build()
+
+        var postApi: PostApi=retrofit.create(PostApi::class.java)
+        var postCall = postApi.posts
+        postCall.enqueue(object : Callback<List<Post>>{
+            override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
+                val listView= view?.findViewById<RecyclerView>(R.id.post_data)
+                val adaptor=PostAdaptor(postList)
+                listView?.adapter =adaptor
+                println("data recived")
+            }
+
+            override fun onFailure(call: Call<List<Post>>, t: Throwable) {
+                Log.d("GET ApI",t.message.toString())
+            }
+
+        })
     }
 
     companion object {

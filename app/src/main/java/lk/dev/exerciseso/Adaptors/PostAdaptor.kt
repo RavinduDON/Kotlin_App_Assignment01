@@ -1,6 +1,5 @@
 package lk.dev.exerciseso.Adaptors
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,25 +9,27 @@ import lk.dev.exerciseso.R
 import lk.dev.exerciseso.ThirdFragment
 import lk.dev.exerciseso.posts.models.Post
 
-class PostAdaptor(private val dataSet: ArrayList<Post>) : RecyclerView.Adapter<PostAdaptor.ViewHolder>() {
+class PostAdaptor(private val context: ThirdFragment, private val dataSet: ArrayList<Post>) : RecyclerView.Adapter<PostAdaptor.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostAdaptor.ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_view_item,parent,false))
+        val view=LayoutInflater.from(parent.context).inflate(R.layout.list_view_item,parent,false)
+        return ViewHolder(view)
+    }
+
+    class ViewHolder(val itemView: View) :RecyclerView.ViewHolder(itemView) {
+        lateinit var titleTextView: TextView
+        init {
+            titleTextView=itemView.findViewById(R.id.title_textview)
+        }
     }
 
     override fun onBindViewHolder(holder: PostAdaptor.ViewHolder, position: Int) {
-        val dataModel=dataSet.get(position)
-        holder.titleTextView.text=dataModel.title
+        val dataMOdel=dataSet.get(position)
+        holder.titleTextView.text=dataMOdel.title
     }
 
     override fun getItemCount(): Int {
         return dataSet.size
     }
 
-    class ViewHolder(itemlayoutView: View): RecyclerView.ViewHolder(itemlayoutView){
-         var titleTextView:TextView
-        init {
-            titleTextView=itemlayoutView.findViewById(R.id.title_textview)
-        }
-    }
 
 }

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import lk.dev.exerciseso.Adaptors.PostAdaptor
 import lk.dev.exerciseso.posts.api.PostClient
@@ -32,6 +33,7 @@ class ThirdFragment : Fragment() {
     private var param2: String? = null
 
     var postList =ArrayList<Post>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,6 +107,7 @@ class ThirdFragment : Fragment() {
         call.enqueue(object : Callback<ArrayList<Post>>{
             override fun onResponse(call: Call<ArrayList<Post>>, response: Response<ArrayList<Post>>) {
                 postList.addAll((response.body()!!))
+                view?.findViewById<RecyclerView>(R.id.post_data)?.adapter?.notifyDataSetChanged()
                 println("Success")
             }
 
